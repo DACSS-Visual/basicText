@@ -21,8 +21,9 @@ Let me get a data frame with texts from some tweets:
 ```{r}
 # clean memory
 rm(list = ls()) 
-link1="https://github.com/EvansDataScience/VAforPM_Text/"
+link1="https://github.com/DACSS-Visual/basicText/"
 link2="raw/main/trumps.csv"
+
 trumpLink=paste0(link1,link2)
 allTweets=read.csv(trumpLink ,stringsAsFactors = F)
 ```
@@ -168,12 +169,14 @@ ggplot(forCloud_descending, aes(label = EachWord, size = Counts,color = Counts))
 
 You do not always tweets, buy some simple text like this:
 
-![](sometext.png)
+![](https://github.com/DACSS-Visual/basicText/blob/main/sometext.png?raw=true)
+
 
 You can simply save that text as a **txt** file. Let me work with that file:
 
 ```{r, warning=FALSE}
-otherText <- read.delim("sometext.txt",header = F)
+LinkText="https://github.com/DACSS-Visual/basicText/raw/main/sometext.txt"
+otherText <- read.delim(LinkText,header = F)
 ```
 
 Write the code to produce obtain each word:

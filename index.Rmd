@@ -7,7 +7,7 @@ _____
 <a id='TOC'></a>
 
 
-# Text Data
+# Text Data 
 _____
 
 
@@ -45,10 +45,10 @@ head(allTweets$text,2)
 This data frame has some columns that allow subsetting. In this case, I will keeping tweets that are not retweets.
 
 ```{r}
-DTtweets=allTweets[allTweets$is_retweet==FALSE ,] 
-DTtweets=DTtweets[,c(1,2)]
+SomeTrumpTweets=allTweets[allTweets$is_retweet==FALSE ,] 
+SomeTrumpTweets=SomeTrumpTweets[,c(1,2)]
 #some
-head(DTtweets,3)
+head(SomeTrumpTweets,3)
 ```
 
 3. Turn the text messages into words.
@@ -58,26 +58,28 @@ This process, also known as **tokenization**, will produce a simpler element fro
 ```{r, warning=FALSE, message=FALSE}
 library(tidytext) 
 library(magrittr) 
-DTtweets_Words = DTtweets %>%
+WordsIn_SomeTrumpTweets = SomeTrumpTweets %>%
                  unnest_tokens(output=EachWord, # column created
-                               input=text,# input column from DTtweets
+                               input=text,# input column from SomeTrumpTweets
                                token="words") # level of unnesting
 
-head(DTtweets_Words,10) # notice 'EachWord'
+# the date is the same for all the words coming from the
+# same tweet:
+head(WordsIn_SomeTrumpTweets,10) # notice 'EachWord'
 ```
 
 You have these many 'words':
 
 ```{r}
-nrow(DTtweets_Words) # count of words
+nrow(WordsIn_SomeTrumpTweets) # count of words
 ```
 
 
-4. Getting rid of **common words**: These are know as the _STOP WORDS_:
+4. Getting rid of **common words**: These are know as the _STOP WORDS_...
 
 ```{r}
 # calling the file 
-data(stop_words)
+data(stop_words) # from library 'tidytext'
 # seeing some 'STOP WORDS'  
 head(stop_words)
 ```
@@ -87,21 +89,21 @@ Then, we  remove the stop words from the _EachWord_ column:
 ```{r, message=FALSE}
 library(dplyr)
 
- # The column 'word' from 'stop_words' will be compared # to the column 'EachWord' in 'DTtweets_Words' 
-DTtweets_Words = DTtweets_Words %>%anti_join(stop_words,
+ # The column 'word' from 'stop_words' will be compared # to the column 'EachWord' in 'WordsIn_SomeTrumpTweets' 
+WordsIn_SomeTrumpTweets = WordsIn_SomeTrumpTweets %>%anti_join(stop_words,
                                              by = c("EachWord" = "word"))
 
 # You have these many rows now:
 
-nrow(DTtweets_Words) # count of words
+nrow(WordsIn_SomeTrumpTweets) # less than 50%
 ```
 
 5. Compute **frequency** of each word:
 
-Here, you are simply producing a frequency table. You could create a barplot with this.
+Here, you are simply producing a frequency table:
 
 ```{r}
-forCloud=as.data.frame(table(DTtweets_Words$EachWord))
+forCloud=as.data.frame(table(WordsIn_SomeTrumpTweets$EachWord))
 names(forCloud)=c('EachWord','Counts')
 #sorting by count:
 forCloud_ascending=forCloud[order(forCloud$Counts),]
@@ -116,8 +118,17 @@ head(forCloud_ascending,10)
 ```{r}
 tail(forCloud_ascending,10)
 ```
+
+Since you have a frequency table, you could prepare a barplot:
+
+```{r}
+library(ggplot2)
+
+ggplot(data=forCloud_ascending) + geom_bar(aes(x=reorder(EachWord,Counts), y=Counts), stat = 'identity') + coord_flip()
+```
+
  
-Text, especially from tweets or similar platforms, bring unexpected _words_, so you may need to some extra cleaning manually:
+Text, especially from tweets or similar platforms, bring unexpected _words_, so you may need to manually perform some extra cleaning:
  
 ```{r}
 # dropping by text:
@@ -128,18 +139,24 @@ forCloud_ascending=forCloud_ascending[!forCloud_ascending$EachWord%in%badWords,]
 forCloud_ascending=forCloud_ascending[forCloud_ascending$Counts>4,]
 ```
  
+Checking the barplot again:
+
+```{r}
+ggplot(data=forCloud_ascending) + geom_bar(aes(x=reorder(EachWord,Counts), y=Counts), stat = 'identity') + coord_flip()
+```
 
 
 
 6. Create a word cloud:
 
-Write the code to produce the cloud below.
+Let's write the code to produce the cloud below.
 
 ```{r, echo=TRUE, eval=TRUE, message=FALSE}
 library(ggwordcloud)
 
 ggplot(forCloud_ascending, 
-       aes(label = EachWord, size = Counts,color = Counts)) +
+       aes(label = EachWord,
+           size = Counts,color = Counts)) +
     geom_text_wordcloud_area() +
     theme_minimal() +
     scale_color_gradient(low = "red", high = "darkred")
@@ -162,12 +179,12 @@ forCloud_descending=forCloud_ascending[order(-forCloud_ascending$Counts),]
 #now
 
 ggplot(forCloud_descending, aes(label = EachWord, size = Counts,color = Counts)) +
-  geom_text_wordcloud_area(eccentricity = 0.65) +
+  geom_text_wordcloud_area(eccentricity = 0.7) +
   theme_minimal() + scale_size_area(max_size = 13)+ # try increasing
   scale_color_gradient(low = "red", high = "darkred")
 ```
 
-You do not always tweets, buy some simple text like this:
+You do not always work with tweets, but some simple text like this:
 
 ![](https://github.com/DACSS-Visual/basicText/blob/main/sometext.png?raw=true)
 
@@ -177,13 +194,16 @@ You can simply save that text as a **txt** file. Let me work with that file:
 ```{r, warning=FALSE}
 LinkText="https://github.com/DACSS-Visual/basicText/raw/main/sometext.txt"
 otherText <- read.delim(LinkText,header = F)
+
+head(otherText)
 ```
 
-Write the code to produce obtain each word:
+Notice the rows were produced when a new line (paragraph) is found in the TXT file. Now, let's write the code to produce obtain each word:
+
 ```{r}
 otherText_words=otherText %>%
                unnest_tokens(output=EachWord,
-                             input=V1,
+                             input=V1,# column of the texts
                              token="words")%>%
                anti_join(stop_words,
                          by = c("EachWord" = "word"))
@@ -195,16 +215,15 @@ Now you can prepare a frequency table, let's learn **count** from **dplyr**:
 txtAsc_descending=dplyr::count(otherText_words,EachWord,
                                name='Counts',
                                sort = TRUE)
+# let's subset:
+txtAsc_descending=txtAsc_descending[txtAsc_descending$Counts>4,]
+
 # result
 head(txtAsc_descending,10)
 ```
 
 
 ```{r}
-# let's subset:
-               
-
-txtAsc_descending=txtAsc_descending[txtAsc_descending$Counts>4,]
 
 ggplot(txtAsc_descending, 
        aes(label = EachWord, 
@@ -215,7 +234,7 @@ ggplot(txtAsc_descending,
   scale_color_gradient(low = "red", high = "darkred")
 ```
 
-Notice that you coud have used a barplot:
+Barplots are useful:
 
 ```{r}
 ggplot(txtAsc_descending)  + 
@@ -232,4 +251,4 @@ ggplot(head(txtAsc_descending,15))  +
                                y=Counts),
                            nudge_y = 2)
 ```
-
+However, word clouds may help the audience engage more into the subject. But, notice that words require some advanced work (lemmatization/stemming) to finally capture the concept used in the text.

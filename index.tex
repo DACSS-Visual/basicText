@@ -1,0 +1,1037 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Text Data}\label{text-data}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Text can also be visualized, but unlike numeric variables, text usually
+needs extra preparation before plotting. Words appear in different
+forms, some words are very common but not very informative, and some
+meaningful ideas are expressed as phrases rather than single words.
+
+In this session, you will learn a simple workflow for visualizing text
+data. We will begin with word frequencies, then compare different
+graphical options:
+
+\begin{itemize}
+\tightlist
+\item
+  word clouds
+\item
+  ranked bar charts
+\item
+  lollipop charts
+\item
+  treemaps
+\item
+  topic models
+\item
+  co-occurrence networks
+\end{itemize}
+
+The goal is not only to produce attractive plots, but also to understand
+what each plot is good for.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Get the text:
+\end{enumerate}
+
+Let me get a data frame with texts from some tweets:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# clean memory}
+\FunctionTok{rm}\NormalTok{(}\AttributeTok{list =} \FunctionTok{ls}\NormalTok{()) }
+\NormalTok{link1}\OtherTok{=}\StringTok{"https://github.com/DACSS{-}Visual/basicText/"}
+\NormalTok{link2}\OtherTok{=}\StringTok{"raw/main/trumps.csv"}
+
+\NormalTok{trumpLink}\OtherTok{=}\FunctionTok{paste0}\NormalTok{(link1,link2)}
+\NormalTok{allTweets}\OtherTok{=}\FunctionTok{read.csv}\NormalTok{(trumpLink ,}\AttributeTok{stringsAsFactors =}\NormalTok{ F)}
+\end{Highlighting}
+\end{Shaded}
+
+The data has these columns:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(allTweets)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "created_at"     "text"           "is_retweet"     "favorite_count"
+## [5] "retweet_count"  "Hour"           "Day"            "Date"
+\end{verbatim}
+
+The Twitter text column has this information:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(allTweets}\SpecialCharTok{$}\NormalTok{text,}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] ".@DonYoungAK really produces for Alaska. He is an incredible Congressman who loves his State and works tirelessly for it. Strong on Public Lands, Energy, and our Second Amendment. He will never let you down, and has my Complete and Total Endorsement! https://t.co/cUR3zuUfs6"
+## [2] "...She will be a great Senator, and has my Complete and Total Endorsement! https://t.co/7yHPhxqQVS"
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Select the observations of interest
+\end{enumerate}
+
+This data frame has several columns that allow subsetting. In this
+example, I will keep only tweets that are not retweets:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{SomeTrumpTweets }\OtherTok{=}\NormalTok{ allTweets[allTweets}\SpecialCharTok{$}\NormalTok{is\_retweet }\SpecialCharTok{==} \ConstantTok{FALSE}\NormalTok{, ]}
+\NormalTok{SomeTrumpTweets }\OtherTok{=}\NormalTok{ SomeTrumpTweets[, }\FunctionTok{c}\NormalTok{(}\StringTok{"created\_at"}\NormalTok{, }\StringTok{"text"}\NormalTok{)]}
+\CommentTok{\# see}
+\FunctionTok{head}\NormalTok{(SomeTrumpTweets, }\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            created_at
+## 1 2020-08-13 23:26:50
+## 2 2020-08-13 23:23:26
+## 3 2020-08-13 23:23:25
+##                                                                                                                                                                                                                                                                                 text
+## 1 .@DonYoungAK really produces for Alaska. He is an incredible Congressman who loves his State and works tirelessly for it. Strong on Public Lands, Energy, and our Second Amendment. He will never let you down, and has my Complete and Total Endorsement! https://t.co/cUR3zuUfs6
+## 2                                                                                                                                                                                 ...She will be a great Senator, and has my Complete and Total Endorsement! https://t.co/7yHPhxqQVS
+## 3                                                                  .@CynthiaMLummis is a friend of mine and a great woman. She is running for Senate in the very Special State of Wyoming. Cynthia is Strongly for our Military, our Vets, and protection of the Second Amendment...
+\end{verbatim}
+
+At this point, we still have full text messages. To visualize text, we
+first need to break each message into smaller units.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Turn text into words
+\end{enumerate}
+
+This process is called \textbf{tokenization}. Here, each tweet will be
+split into individual words.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(tidytext) }
+
+\NormalTok{WordsIn\_SomeTrumpTweets }\OtherTok{=}\NormalTok{ SomeTrumpTweets }\SpecialCharTok{|\textgreater{}}
+                 \FunctionTok{unnest\_tokens}\NormalTok{(}\AttributeTok{output=}\NormalTok{EachWord, }\CommentTok{\# column created}
+                               \AttributeTok{input=}\NormalTok{text,}\CommentTok{\# input column from SomeTrumpTweets}
+                               \AttributeTok{token=}\StringTok{"words"}\NormalTok{) }\CommentTok{\# level of unnesting}
+
+\CommentTok{\# the date is the same for all the words coming from the}
+\CommentTok{\# same tweet:}
+\FunctionTok{head}\NormalTok{(WordsIn\_SomeTrumpTweets,}\DecValTok{10}\NormalTok{) }\CommentTok{\# notice \textquotesingle{}EachWord\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             created_at    EachWord
+## 1  2020-08-13 23:26:50  donyoungak
+## 2  2020-08-13 23:26:50      really
+## 3  2020-08-13 23:26:50    produces
+## 4  2020-08-13 23:26:50         for
+## 5  2020-08-13 23:26:50      alaska
+## 6  2020-08-13 23:26:50          he
+## 7  2020-08-13 23:26:50          is
+## 8  2020-08-13 23:26:50          an
+## 9  2020-08-13 23:26:50  incredible
+## 10 2020-08-13 23:26:50 congressman
+\end{verbatim}
+
+Notice that the date is repeated for every word that comes from the same
+tweet.
+
+How many word-tokens do we have now?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{nrow}\NormalTok{(WordsIn\_SomeTrumpTweets) }\CommentTok{\# count of words}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3028
+\end{verbatim}
+
+This number includes repeated words, which is useful because frequency
+is often our first summary of text.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Remove common words: \textbf{stopwords}
+\end{enumerate}
+
+Many very frequent words carry little substantive meaning. Words such as
+the, and, of, or to are useful for grammar, but not always useful for
+analysis. These are called \emph{stopwords}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calling the file }
+\FunctionTok{data}\NormalTok{(stop\_words) }\CommentTok{\# from library \textquotesingle{}tidytext\textquotesingle{}}
+\CommentTok{\# seeing some \textquotesingle{}STOP WORDS\textquotesingle{}  }
+\FunctionTok{head}\NormalTok{(stop\_words)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 2
+##   word      lexicon
+##   <chr>     <chr>  
+## 1 a         SMART  
+## 2 a's       SMART  
+## 3 able      SMART  
+## 4 about     SMART  
+## 5 above     SMART  
+## 6 according SMART
+\end{verbatim}
+
+Then, we remove the stop words from the \emph{EachWord} column:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+
+ \CommentTok{\# The column \textquotesingle{}word\textquotesingle{} from \textquotesingle{}stop\_words\textquotesingle{} will be compared \# to the column \textquotesingle{}EachWord\textquotesingle{} in \textquotesingle{}WordsIn\_SomeTrumpTweets\textquotesingle{} }
+\NormalTok{WordsIn\_SomeTrumpTweets }\OtherTok{=}\NormalTok{ WordsIn\_SomeTrumpTweets }\SpecialCharTok{|\textgreater{}}\FunctionTok{anti\_join}\NormalTok{(stop\_words,}
+                                             \AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"EachWord"} \OtherTok{=} \StringTok{"word"}\NormalTok{))}
+
+\CommentTok{\# You have these many rows now:}
+
+\FunctionTok{nrow}\NormalTok{(WordsIn\_SomeTrumpTweets) }\CommentTok{\# less than 50\%}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1496
+\end{verbatim}
+
+After removing stopwords, the number of rows decreases because many very
+common words are filtered out.
+
+This does not mean the remaining words are \textbf{per se} important. It
+only means we are removing words that are usually too general to help
+interpretation.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Compute \textbf{frequency} of each word:
+\end{enumerate}
+
+Here, you are simply producing a frequency table:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{forCloud }\OtherTok{=}\NormalTok{ WordsIn\_SomeTrumpTweets }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{count}\NormalTok{(EachWord, }\AttributeTok{name =} \StringTok{"Counts"}\NormalTok{, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{)}
+
+\FunctionTok{head}\NormalTok{(forCloud, }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          EachWord Counts
+## 1           https     54
+## 2            t.co     54
+## 3             bus     20
+## 4          people     18
+## 5           usdot     17
+## 6  infrastructure     14
+## 7         service     14
+## 8         support     13
+## 9        complete     12
+## 10           news     12
+\end{verbatim}
+
+The most frequent words appear at the top.
+
+Since you have a frequency table, you could prepare a barplot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'ggplot2' was built under R version 4.5.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data=}\NormalTok{forCloud) }\SpecialCharTok{+} \FunctionTok{geom\_bar}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\FunctionTok{reorder}\NormalTok{(EachWord,Counts), }\AttributeTok{y=}\NormalTok{Counts), }\AttributeTok{stat =} \StringTok{\textquotesingle{}identity\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{coord\_flip}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-10-1.pdf}}
+
+However, text from tweets often contains noisy elements such as
+shortened links or platform-specific tokens. So some additional cleaning
+may still be necessary.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{badWords }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"https"}\NormalTok{, }\StringTok{"t.co"}\NormalTok{)}
+
+\NormalTok{forCloud }\OtherTok{=}\NormalTok{ forCloud }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\NormalTok{EachWord }\SpecialCharTok{\%in\%}\NormalTok{ badWords) }\SpecialCharTok{|\textgreater{}}  \CommentTok{\# dropping by text:}
+  \FunctionTok{filter}\NormalTok{(Counts }\SpecialCharTok{\textgreater{}} \DecValTok{4}\NormalTok{) }\CommentTok{\# dropping by count:}
+
+\FunctionTok{head}\NormalTok{(forCloud, }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          EachWord Counts
+## 1             bus     20
+## 2          people     18
+## 3           usdot     17
+## 4  infrastructure     14
+## 5         service     14
+## 6         support     13
+## 7        complete     12
+## 8            news     12
+## 9     endorsement     11
+## 10        federal     11
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Ranked bar chart
+\end{enumerate}
+
+Let's re create the bar chart, just for the top 15 rows.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+
+\FunctionTok{ggplot}\NormalTok{(forCloud }\SpecialCharTok{|\textgreater{}} \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n =} \DecValTok{15}\NormalTok{),}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(EachWord, Counts), }\AttributeTok{y =}\NormalTok{ Counts)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count"}\NormalTok{,}
+       \AttributeTok{title =} \StringTok{"Most frequent words"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-12-1.pdf}}
+This plot is very useful because it allows precise comparison. You can
+clearly see:
+
+\begin{itemize}
+\tightlist
+\item
+  which words are most frequent
+\item
+  their ranking
+\item
+  the size of the differences between them
+\end{itemize}
+
+\begin{quote}
+Notice that for comparing frequencies, bar charts are usually better
+than word clouds.
+\end{quote}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  Lollipop chart
+\end{enumerate}
+
+A lollipop chart shows the same information as a bar chart, but with a
+lighter appearance.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(forCloud }\SpecialCharTok{|\textgreater{}} \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n =} \DecValTok{15}\NormalTok{),}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(EachWord, Counts), }\AttributeTok{y =}\NormalTok{ Counts)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_segment}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xend =}\NormalTok{ EachWord, }\AttributeTok{y =} \DecValTok{0}\NormalTok{, }\AttributeTok{yend =}\NormalTok{ Counts)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{size =} \DecValTok{3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count"}\NormalTok{,}
+       \AttributeTok{title =} \StringTok{"Most frequent words: lollipop chart"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-13-1.pdf}}
+This is useful when you want a cleaner look but still need a ranked
+comparison.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  Word cloud
+\end{enumerate}
+
+Now let us build the word cloud using \textbf{ggwordcloud}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggwordcloud)}
+
+\FunctionTok{ggplot}\NormalTok{(forCloud,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ EachWord,}
+           \AttributeTok{size =}\NormalTok{ Counts,}
+           \AttributeTok{color =}\NormalTok{ Counts)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text\_wordcloud\_area}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_gradient}\NormalTok{(}\AttributeTok{low =} \StringTok{"red"}\NormalTok{, }\AttributeTok{high =} \StringTok{"darkred"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-14-1.pdf}}
+
+You can improve this using \textbf{scale\_size\_area()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(forCloud,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ EachWord,}
+           \AttributeTok{size =}\NormalTok{ Counts,}
+           \AttributeTok{color =}\NormalTok{ Counts)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text\_wordcloud\_area}\NormalTok{(}\AttributeTok{eccentricity =} \FloatTok{0.65}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_size\_area}\NormalTok{(}\AttributeTok{max\_size =} \DecValTok{13}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_gradient}\NormalTok{(}\AttributeTok{low =} \StringTok{"red"}\NormalTok{, }\AttributeTok{high =} \StringTok{"darkred"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-15-1.pdf}}
+
+Word clouds are often visually attractive, but they are not ideal for
+accurate comparison. They are better for quick engagement and general
+impression than for careful measurement.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{8}
+\tightlist
+\item
+  Treemap
+\end{enumerate}
+
+A treemap is another way to visualize frequencies using area.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(treemapify)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'treemapify' was built under R version 4.5.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(forCloud }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n =} \DecValTok{20}\NormalTok{),}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{area =}\NormalTok{ Counts, }\AttributeTok{fill =}\NormalTok{ Counts, }\AttributeTok{label =}\NormalTok{ EachWord)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_treemap}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_treemap\_text}\NormalTok{(}\AttributeTok{place =} \StringTok{"centre"}\NormalTok{, }\AttributeTok{colour =} \StringTok{"white"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Word frequencies as a treemap"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-16-1.pdf}}
+
+Treemaps are compact and visually appealing, but again, they are not as
+precise as bars for comparing values.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{9}
+\tightlist
+\item
+  A second example: reading from a TXT file
+\end{enumerate}
+
+Not all text data comes from tweets. Sometimes you simply have a text
+file.
+
+Suppose we have this file:
+
+\pandocbounded{\includegraphics[keepaspectratio]{https://github.com/DACSS-Visual/basicText/blob/main/sometext.png?raw=true}}
+
+You can simply save that text as a \textbf{txt} file. Let me work with
+that file:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{LinkText}\OtherTok{=}\StringTok{"https://github.com/DACSS{-}Visual/basicText/raw/main/sometext.txt"}
+\NormalTok{otherText }\OtherTok{=} \FunctionTok{read.delim}\NormalTok{(LinkText, }\AttributeTok{header =} \ConstantTok{FALSE}\NormalTok{)}
+
+\DocumentationTok{\#\# see some}
+\FunctionTok{head}\NormalTok{(otherText)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       V1
+## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       Seattle is under siege. Over the past five years, the Emerald City has seen an explosion of homelessness, crime, and addiction. In its 2017 point-in-time count of the homeless, King County social-services agency All Home found 11,643 people sleeping in tents, cars, and emergency shelters. Property crime has risen to a rate two and a half times higher than Los Angeles’s and four times higher than New York City’s. Cleanup crews pick up tens of thousands of dirty needles from city streets and parks every year.
+## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         At the same time, according to the Puget Sound Business Journal, the Seattle metro area spends more than $1 billion fighting homelessness every year. That’s nearly $100,000 for every homeless man, woman, and child in King County, yet the crisis seems only to have deepened, with more addiction, more crime, and more tent encampments in residential neighborhoods. By any measure, the city’s efforts are not working.
+## 3       Over the past year, I’ve spent time at city council meetings, political rallies, homeless encampments, and rehabilitation facilities, trying to understand how the government can spend so much money with so little effect. While most of the debate has focused on tactical policy questions (Build more shelters? Open supervised injection sites?), the real battle isn’t being waged in the tents, under the bridges, or in the corridors of City Hall but in the realm of ideas, where, for now, four ideological power centers frame Seattle’s homelessness debate. I’ll identify them as the socialists, the compassion brigades, the homeless-industrial complex, and the addiction evangelists. Together, they have dominated the local policy discussion, diverted hundreds of millions of dollars toward favored projects, and converted many well-intentioned voters to the politics of unlimited compassion. If we want to break through the failed status quo on homelessness in places like Seattle—and in Portland, San Francisco, and Los Angeles, too—we must first map the ideological battlefield, identify the flaws in our current policies, and rethink our assumptions.
+## 4                                                                                                                                                                                                                                                                                                     Seattle has long been known as one of America’s most liberal locales, but in recent years, the city has marched even further left as socialists, once relegated to the margins, have declared war on the Democratic establishment. Socialist Alternative city councilwoman Kshama Sawant claims that the city’s homelessness crisis is the inevitable result of the Amazon boom, greedy landlords, and rapidly increasing rents. As she told Street Roots News: “The explosion of the homelessness crisis is a symptom of how deeply dysfunctional capitalism is and also how much worse living standards have gotten with the last several decades.” The capitalists of Amazon, Starbucks, Microsoft, and Boeing, in her Marxian optic, generate enormous wealth for themselves, drive up housing prices, and push the working class toward poverty and despair—and, too often, onto the streets.
+## 5 On the surface, this argument has its own internal logic. Advocates point to Zillow and McKinsey studies that show a high correlation between rent hikes and homelessness in Seattle, for example. But correlation is not causation, and the survey data paint a remarkably different picture. According to King County’s point-in-time study, only 6 percent of homeless people surveyed cited “could not afford rent increase” as the precipitating cause of their situation, pointing instead to a wide range of other problems—domestic violence, incarceration, mental illness, family conflict, medical conditions, breakups, eviction, addiction, and job loss—as bigger factors. Further, while the Zillow study did find correlation between rising rents and homelessness in four major markets—Seattle, Los Angeles, New York, and Washington, D.C.—it also found that homelessness decreased despite rising rents in Houston, Tampa, Chicago, Phoenix, St. Louis, San Diego, Portland, Detroit, Baltimore, Atlanta, Charlotte, and Riverside. Rent increases are a real burden for the working poor, but the evidence suggests that higher rents alone don’t push people onto the streets.
+## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Even in a pricey city like Seattle, most working- and middle-class residents respond to economic incentives in logical ways: relocating to less expensive neighborhoods, downsizing to smaller apartments, taking in roommates, moving in with family, or leaving the city altogether. King County is home to more than 1 million residents earning below the median income, and 99 percent of them manage to find a place to live and pay the rent on time. The aggregate-level analyses from Zillow and McKinsey don’t take into account the vast number of options available even to the poorest families; for the socialists, “the rent is too damn high” explains everything.
+\end{verbatim}
+
+Notice that a new row is created whenever a new paragraph or line break
+is found.
+
+Now let us tokenize the text and remove stopwords:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otherText\_words}\OtherTok{=}\NormalTok{otherText }\SpecialCharTok{|\textgreater{}}
+               \FunctionTok{unnest\_tokens}\NormalTok{(}\AttributeTok{output=}\NormalTok{EachWord,}
+                             \AttributeTok{input=}\NormalTok{V1,}\CommentTok{\# column of the texts}
+                             \AttributeTok{token=}\StringTok{"words"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+               \FunctionTok{anti\_join}\NormalTok{(stop\_words,}
+                         \AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"EachWord"} \OtherTok{=} \StringTok{"word"}\NormalTok{))}
+\CommentTok{\# you get}
+\FunctionTok{head}\NormalTok{(otherText\_words,}\DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        EachWord
+## 1       seattle
+## 2         siege
+## 3          past
+## 4       emerald
+## 5          city
+## 6     explosion
+## 7  homelessness
+## 8         crime
+## 9     addiction
+## 10         2017
+## 11         time
+## 12        count
+## 13     homeless
+## 14         king
+## 15       county
+## 16       social
+## 17     services
+## 18       agency
+## 19         home
+## 20        found
+\end{verbatim}
+
+Now compute frequencies:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{txtAsc\_descending }\OtherTok{=}\NormalTok{ otherText\_words }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(EachWord, }\AttributeTok{name =} \StringTok{"Counts"}\NormalTok{, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Counts }\SpecialCharTok{\textgreater{}} \DecValTok{4}\NormalTok{)}
+
+\CommentTok{\# you have}
+\FunctionTok{head}\NormalTok{(txtAsc\_descending, }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        EachWord Counts
+## 1      homeless     47
+## 2  homelessness     46
+## 3          city     40
+## 4       seattle     37
+## 5     addiction     21
+## 6       percent     20
+## 7        people     18
+## 8        public     18
+## 9      services     18
+## 10      housing     16
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{10}
+\tightlist
+\item
+  Plotting the TXT example
+\end{enumerate}
+
+Word cloud
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(txtAsc\_descending,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ EachWord,}
+           \AttributeTok{size =}\NormalTok{ Counts,}
+           \AttributeTok{color =}\NormalTok{ Counts)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text\_wordcloud}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_size\_area}\NormalTok{(}\AttributeTok{max\_size =} \DecValTok{10}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_gradient}\NormalTok{(}\AttributeTok{low =} \StringTok{"red"}\NormalTok{, }\AttributeTok{high =} \StringTok{"darkred"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-20-1.pdf}}
+
+Barplots
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(txtAsc\_descending }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n =} \DecValTok{15}\NormalTok{),}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(EachWord, Counts), }\AttributeTok{y =}\NormalTok{ Counts)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count"}\NormalTok{,}
+       \AttributeTok{title =} \StringTok{"Most frequent words in the text"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-21-1.pdf}}
+
+Or, a little better:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{top15 }\OtherTok{=}\NormalTok{ txtAsc\_descending }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{slice\_head}\NormalTok{(}\AttributeTok{n =} \DecValTok{15}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{(top15,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(EachWord, Counts), }\AttributeTok{y =}\NormalTok{ Counts)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{paste0}\NormalTok{(}\FunctionTok{round}\NormalTok{(}\DecValTok{100} \SpecialCharTok{*}\NormalTok{ Counts }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(Counts), }\DecValTok{1}\NormalTok{), }\StringTok{"\%"}\NormalTok{)),}
+            \AttributeTok{nudge\_y =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-22-1.pdf}}
+This is often more informative than a word cloud because the audience
+can see both counts and proportions directly.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{11}
+\tightlist
+\item
+  Co-occurrence networks
+\end{enumerate}
+
+So far, we have treated words as isolated units. But language also has
+structure: some words tend to appear together.
+
+A simple way to explore this is through bigrams, that is, pairs of words
+that appear next to each other.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyr)}
+\FunctionTok{library}\NormalTok{(igraph)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'igraph'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:tidyr':
+## 
+##     crossing
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:dplyr':
+## 
+##     as_data_frame, groups, union
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     decompose, spectrum
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:base':
+## 
+##     union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggraph)}
+
+\NormalTok{bigrams }\OtherTok{=}\NormalTok{ SomeTrumpTweets }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unnest\_tokens}\NormalTok{(bigram, text, }\AttributeTok{token =} \StringTok{"ngrams"}\NormalTok{, }\AttributeTok{n =} \DecValTok{2}\NormalTok{)}
+
+\NormalTok{bigram\_counts }\OtherTok{=}\NormalTok{ bigrams }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{separate}\NormalTok{(bigram, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{"word1"}\NormalTok{, }\StringTok{"word2"}\NormalTok{), }\AttributeTok{sep =} \StringTok{" "}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\NormalTok{word1 }\SpecialCharTok{\%in\%}\NormalTok{ stop\_words}\SpecialCharTok{$}\NormalTok{word,}
+         \SpecialCharTok{!}\NormalTok{word2 }\SpecialCharTok{\%in\%}\NormalTok{ stop\_words}\SpecialCharTok{$}\NormalTok{word) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(word1, word2, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(n }\SpecialCharTok{\textgreater{}=} \DecValTok{5}\NormalTok{)}
+
+\FunctionTok{head}\NormalTok{(bigram\_counts, }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            word1          word2  n
+## 1          https           t.co 54
+## 2            bus        service 12
+## 3          total    endorsement 10
+## 4        federal infrastructure  8
+## 5 infrastructure          funds  8
+## 6        support            bus  8
+## 7            joe          biden  6
+## 8        radical           left  5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bigram\_graph }\OtherTok{=} \FunctionTok{graph\_from\_data\_frame}\NormalTok{(bigram\_counts)}
+
+\FunctionTok{ggraph}\NormalTok{(bigram\_graph, }\AttributeTok{layout =} \StringTok{"fr"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_edge\_link}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{width =}\NormalTok{ n), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_node\_point}\NormalTok{(}\AttributeTok{size =} \DecValTok{4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_node\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ name), }\AttributeTok{repel =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: The `trans` argument of `continuous_scale()` is deprecated as of ggplot2 3.5.0.
+## i Please use the `transform` argument instead.
+## This warning is displayed once per session.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-24-1.pdf}}
+
+This plot does not focus on word frequency alone. Instead, it helps
+reveal relationships between words.
+
+That is often more meaningful than treating words separately.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{12}
+\tightlist
+\item
+  Topic models
+\end{enumerate}
+
+Sometimes we want to move from individual words to broader themes in a
+collection of documents. Topic models help us do that.
+
+The basic idea is simple: instead of asking ``Which words are
+frequent?'', topic models ask:
+
+Which words tend to appear together across documents, suggesting a
+latent topic?
+
+Here, each tweet is treated as a document.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(topicmodels)}
+
+\NormalTok{tweet\_words }\OtherTok{=}\NormalTok{ SomeTrumpTweets }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{doc\_id =} \FunctionTok{row\_number}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unnest\_tokens}\NormalTok{(word, text) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{anti\_join}\NormalTok{(stop\_words, }\AttributeTok{by =} \StringTok{"word"}\NormalTok{)}
+
+\NormalTok{tweet\_dtm }\OtherTok{=}\NormalTok{ tweet\_words }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(doc\_id, word) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{cast\_dtm}\NormalTok{(}\AttributeTok{document =}\NormalTok{ doc\_id, }\AttributeTok{term =}\NormalTok{ word, }\AttributeTok{value =}\NormalTok{ n)}
+
+\NormalTok{lda\_model }\OtherTok{=} \FunctionTok{LDA}\NormalTok{(tweet\_dtm, }\AttributeTok{k =} \DecValTok{3}\NormalTok{, }\AttributeTok{control =} \FunctionTok{list}\NormalTok{(}\AttributeTok{seed =} \DecValTok{1234}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Let us extract the most important terms in each topic:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidytext)}
+
+\NormalTok{topics\_top\_terms }\OtherTok{=} \FunctionTok{tidy}\NormalTok{(lda\_model, }\AttributeTok{matrix =} \StringTok{"beta"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(topic) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice\_max}\NormalTok{(beta, }\AttributeTok{n =} \DecValTok{8}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+To plot them nicely, we use a helper from tidytext:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidytext)}
+
+\FunctionTok{ggplot}\NormalTok{(topics\_top\_terms,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder\_within}\NormalTok{(term, beta, topic),}
+           \AttributeTok{y =}\NormalTok{ beta)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{topic, }\AttributeTok{scales =} \StringTok{"free"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_reordered}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =} \StringTok{"Beta"}\NormalTok{,}
+       \AttributeTok{title =} \StringTok{"Top terms by topic"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/unnamed-chunk-27-1.pdf}}
+This is not just a visualization technique. It is also a modeling
+strategy for discovering themes in text.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{13}
+\tightlist
+\item
+  Interpreting text plots carefully
+\end{enumerate}
+
+Text graphics can be attractive, but interpretation requires caution.
+
+A frequent word is not necessarily an important idea. It may be:
+
+\begin{itemize}
+\tightlist
+\item
+  a repeated name
+\item
+  a slogan
+\item
+  a response to current events
+\item
+  part of criticism or support
+\item
+  a word used sarcastically
+\end{itemize}
+
+So, frequency does not automatically imply meaning.
+
+Also, different forms of the same idea may appear as different words.
+For example:
+
+\begin{itemize}
+\tightlist
+\item
+  run
+\item
+  runs
+\item
+  running
+\end{itemize}
+
+This is why more advanced text analysis often uses \textbf{stemming} or
+\textbf{lemmatization}.
+
+Single-word plots are a useful starting point, but they do not capture
+all the complexity of language.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{14}
+\tightlist
+\item
+  What each plot is good for
+\end{enumerate}
+
+Here is a useful summary:
+
+\begin{itemize}
+\tightlist
+\item
+  Ranked bar chart: best for precise comparison
+\item
+  Lollipop chart: similar to bars, visually lighter
+\item
+  Word cloud: engaging, but weak for exact comparison
+\item
+  Treemap: compact view of relative frequency
+\item
+  Co-occurrence network: reveals relationships between words
+\item
+  Topic model plot: reveals broader themes across documents
+\end{itemize}
+
+So the choice of plot depends on the goal.
+
+\begin{itemize}
+\item
+  If your goal is comparison, bars are usually best.
+\item
+  If your goal is engagement, a word cloud may help.
+\item
+  If your goal is structure or themes, networks and topic models are
+  more useful.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{15}
+\tightlist
+\item
+  Final remark
+\end{enumerate}
+
+Text visualization is powerful, but language is complex.
+
+Good text graphics require:
+
+\begin{itemize}
+\tightlist
+\item
+  good preprocessing
+\item
+  good visualization choices
+\item
+  careful interpretation
+\end{itemize}
+
+In other words, text visualization is not only about making words look
+attractive. It is about transforming language into data without
+forgetting that language always carries context, ambiguity, and meaning.
+
+\end{document}

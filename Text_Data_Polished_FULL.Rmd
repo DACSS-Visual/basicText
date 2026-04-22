@@ -1,0 +1,481 @@
+---
+title: "Text Data"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 10,
+  fig.height = 6,
+  fig.align = "center",
+  out.width = "90%"
+)
+```
+
+# Text Data
+_____
+
+Text can also be visualized, but unlike numeric variables, text usually needs some extra preparation before plotting. Words appear in different forms, some words are very common but not very informative, and some meaningful ideas are expressed as phrases rather than as single words.
+
+In this session, you will learn a simple workflow for visualizing text data. We will begin with **word frequencies**, and then compare different graphical options:
+
+- word clouds
+- ranked bar charts
+- lollipop charts
+- treemaps
+- topic models
+- co-occurrence networks
+
+The goal is not only to produce attractive plots, but also to understand what each plot is good for.
+
+## 1. Get the text data
+
+Let us begin with a data frame containing tweets:
+
+```{r}
+rm(list = ls())
+
+link1 = "https://github.com/DACSS-Visual/basicText/"
+link2 = "raw/main/trumps.csv"
+
+trumpLink = paste0(link1, link2)
+allTweets = read.csv(trumpLink, stringsAsFactors = FALSE)
+```
+
+The data has these columns:
+
+```{r}
+names(allTweets)
+```
+
+The column with the tweet text contains entries like these:
+
+```{r}
+head(allTweets$text, 2)
+```
+
+## 2. Select the observations of interest
+
+This data frame has several columns that allow subsetting. In this example, I will keep only tweets that are **not retweets**:
+
+```{r}
+SomeTrumpTweets = allTweets[allTweets$is_retweet == FALSE, ]
+SomeTrumpTweets = SomeTrumpTweets[, c("created_at", "text")]
+
+head(SomeTrumpTweets, 3)
+```
+
+At this point, we still have complete text messages. To visualize text, we first need to break each message into smaller units.
+
+## 3. Turn text into words
+
+This process is called **tokenization**. Here, each tweet will be split into individual words.
+
+```{r}
+library(dplyr)
+library(tidytext)
+
+WordsIn_SomeTrumpTweets = SomeTrumpTweets |>
+  unnest_tokens(
+    output = EachWord,
+    input  = text,
+    token  = "words"
+  )
+
+head(WordsIn_SomeTrumpTweets, 10)
+```
+
+Notice that the date is repeated for every word coming from the same tweet.
+
+How many word-tokens do we have now?
+
+```{r}
+nrow(WordsIn_SomeTrumpTweets)
+```
+
+This number includes repeated words, which is useful because frequency is often our first summary of text.
+
+## 4. Remove common words: stopwords
+
+Many very frequent words carry little substantive meaning. Words such as *the*, *and*, *of*, or *to* are useful for grammar, but not always useful for analysis. These are called **stopwords**.
+
+```{r}
+data(stop_words)
+head(stop_words)
+```
+
+Now let us remove them:
+
+```{r}
+WordsIn_SomeTrumpTweets = WordsIn_SomeTrumpTweets |>
+  anti_join(stop_words, by = c("EachWord" = "word"))
+
+nrow(WordsIn_SomeTrumpTweets)
+```
+
+After removing stopwords, the number of rows decreases because many very common words are filtered out.
+
+This does **not** mean the remaining words are automatically important. It only means we are removing words that are usually too general to help interpretation.
+
+## 5. Compute word frequencies
+
+Now we can build a frequency table. This is the basic summary behind many text visualizations.
+
+```{r}
+badWords = c("https", "t.co", "amp")
+
+forCloud = WordsIn_SomeTrumpTweets |>
+  count(EachWord, name = "Counts", sort = TRUE) |>
+  filter(!EachWord %in% badWords) |>
+  filter(Counts > 4)
+
+head(forCloud, 10)
+```
+
+These are the words that appear most often after basic cleaning.
+
+Before moving to more decorative plots, it is useful to begin with the clearest graph possible.
+
+## 6. Ranked bar chart
+
+A ranked bar chart is usually the best option when the goal is **comparison**.
+
+```{r}
+library(ggplot2)
+
+top_words = forCloud |>
+  slice_head(n = 15)
+
+ggplot(top_words,
+       aes(x = reorder(EachWord, Counts), y = Counts)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    x = "",
+    y = "Count",
+    title = "Most frequent words"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+This plot is very useful because it allows precise comparison. You can clearly see:
+
+- which words are most frequent
+- their ranking
+- the size of the differences between them
+
+For comparing frequencies, bar charts are usually better than word clouds.
+
+## 7. Lollipop chart
+
+A lollipop chart shows the same information as a bar chart, but with a lighter appearance.
+
+```{r}
+ggplot(top_words,
+       aes(x = reorder(EachWord, Counts), y = Counts)) +
+  geom_segment(aes(xend = EachWord, y = 0, yend = Counts)) +
+  geom_point(size = 3) +
+  coord_flip() +
+  labs(
+    x = "",
+    y = "Count",
+    title = "Most frequent words: lollipop chart"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+This chart still prioritizes ranking and comparison, but it uses less visual weight than bars.
+
+## 8. Word cloud
+
+Now let us build the word cloud.
+
+```{r, fig.height=7}
+library(ggwordcloud)
+
+forCloud_descending = forCloud |>
+  arrange(desc(Counts))
+
+ggplot(forCloud_descending,
+       aes(label = EachWord,
+           size  = Counts,
+           color = Counts)) +
+  geom_text_wordcloud_area(eccentricity = 0.7, rm_outside = TRUE) +
+  scale_size_area(max_size = 18) +
+  scale_color_gradient(low = "red", high = "darkred") +
+  theme_minimal(base_size = 16) +
+  labs(title = "Word cloud of frequent terms")
+```
+
+Word clouds are often visually attractive, but they are not ideal for accurate comparison. They are better for quick engagement and general impression than for careful measurement.
+
+## 9. Treemap
+
+A treemap is another way to represent frequencies, this time using **area**.
+
+```{r}
+library(treemapify)
+
+ggplot(forCloud |>
+         slice_head(n = 20),
+       aes(area = Counts, fill = Counts, label = EachWord)) +
+  geom_treemap() +
+  geom_treemap_text(place = "centre", colour = "white", reflow = TRUE) +
+  labs(title = "Word frequencies as a treemap") +
+  theme_minimal(base_size = 14)
+```
+
+Treemaps are compact and visually appealing, but they are not as precise as bars for comparing values.
+
+## 10. A second example: reading from a TXT file
+
+Not all text data comes from tweets. Sometimes you simply have a text file.
+
+Suppose we have this file:
+
+![](https://github.com/DACSS-Visual/basicText/blob/main/sometext.png?raw=true)
+
+We can read it like this:
+
+```{r}
+LinkText = "https://github.com/DACSS-Visual/basicText/raw/main/sometext.txt"
+otherText = read.delim(LinkText, header = FALSE)
+
+head(otherText)
+```
+
+Notice that a new row is created whenever a new paragraph or line break is found.
+
+Now let us tokenize the text and remove stopwords:
+
+```{r}
+otherText_words = otherText |>
+  unnest_tokens(output = EachWord,
+                input  = V1,
+                token  = "words") |>
+  anti_join(stop_words, by = c("EachWord" = "word")) |>
+  filter(!EachWord %in% badWords)
+
+head(otherText_words, 20)
+```
+
+Now compute frequencies:
+
+```{r}
+txt_counts = otherText_words |>
+  count(EachWord, name = "Counts", sort = TRUE) |>
+  filter(Counts > 4)
+
+head(txt_counts, 10)
+```
+
+## 11. Plotting the TXT example
+
+### Word cloud
+
+```{r, fig.height=7}
+ggplot(txt_counts,
+       aes(label = EachWord,
+           size  = Counts,
+           color = Counts)) +
+  geom_text_wordcloud_area(rm_outside = TRUE) +
+  scale_size_area(max_size = 18) +
+  scale_color_gradient(low = "red", high = "darkred") +
+  theme_minimal(base_size = 16) +
+  labs(title = "Word cloud from the TXT file")
+```
+
+### Ranked bars
+
+```{r}
+txt_top15 = txt_counts |>
+  slice_head(n = 15)
+
+ggplot(txt_top15,
+       aes(x = reorder(EachWord, Counts), y = Counts)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    x = "",
+    y = "Count",
+    title = "Most frequent words in the text"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+### Ranked bars with percentages
+
+```{r}
+ggplot(txt_top15,
+       aes(x = reorder(EachWord, Counts), y = Counts)) +
+  geom_col() +
+  coord_flip() +
+  geom_text(
+    aes(label = paste0(round(100 * Counts / sum(Counts), 1), "%")),
+    nudge_y = 2
+  ) +
+  labs(
+    x = "",
+    y = "Count",
+    title = "Most frequent words in the text"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+This version is often more informative than a word cloud because the audience can see both counts and proportions directly.
+
+## 12. Co-occurrence networks
+
+So far, we have treated words as isolated units. But language also has structure: some words tend to appear together.
+
+A simple way to explore this is through **bigrams**, that is, pairs of words that appear next to each other.
+
+```{r}
+library(tidyr)
+library(igraph)
+library(ggraph)
+
+bigrams = SomeTrumpTweets |>
+  unnest_tokens(bigram, text, token = "ngrams", n = 2)
+
+bigram_counts = bigrams |>
+  separate(bigram, into = c("word1", "word2"), sep = " ") |>
+  filter(!word1 %in% stop_words$word,
+         !word2 %in% stop_words$word) |>
+  filter(!word1 %in% badWords,
+         !word2 %in% badWords) |>
+  count(word1, word2, sort = TRUE) |>
+  filter(n >= 5)
+
+head(bigram_counts, 10)
+```
+
+Now turn those connections into a network:
+
+```{r, fig.height=7, echo=FALSE}
+bigram_graph = graph_from_data_frame(bigram_counts)
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link(aes(width = n), alpha = 0.4) +
+  geom_node_point(size = 4) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 5) +
+  theme_void()
+```
+
+This plot does not focus only on word frequency. Instead, it reveals **relationships between words**. That is often more meaningful than treating words separately.
+
+## 13. Topic models
+
+Sometimes we want to move from individual words to broader **themes** in a collection of documents. Topic models help us do that.
+
+The basic idea is simple: instead of asking *Which words are frequent?*, topic models ask:
+
+> Which words tend to appear together across documents, suggesting a latent topic?
+
+Here, each tweet is treated as a document.
+
+```{r}
+library(topicmodels)
+
+tweet_words = SomeTrumpTweets |>
+  mutate(doc_id = row_number()) |>
+  unnest_tokens(word, text) |>
+  anti_join(stop_words, by = "word") |>
+  filter(!word %in% badWords)
+
+tweet_dtm = tweet_words |>
+  count(doc_id, word) |>
+  cast_dtm(document = doc_id, term = word, value = n)
+
+lda_model = LDA(tweet_dtm, k = 3, control = list(seed = 1234))
+```
+
+Let us extract the most important terms in each topic:
+
+```{r}
+topics_top_terms = tidy(lda_model, matrix = "beta") |>
+  group_by(topic) |>
+  slice_max(beta, n = 8) |>
+  ungroup()
+```
+
+To plot them nicely, we use a helper from `tidytext`:
+
+```{r, echo=FALSE}
+ggplot(topics_top_terms,
+       aes(x = reorder_within(term, beta, topic),
+           y = beta)) +
+  geom_col() +
+  facet_wrap(~topic, scales = "free") +
+  scale_x_reordered() +
+  coord_flip() +
+  labs(
+    x = "",
+    y = "Beta",
+    title = "Top terms by topic"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+This is not just a visualization technique. It is also a modeling strategy for discovering themes in text.
+
+## 14. Interpreting text plots carefully
+
+Text graphics can be attractive, but interpretation requires caution.
+
+A frequent word is not necessarily an important idea. It may be:
+
+- a repeated name
+- a slogan
+- a response to current events
+- part of criticism or support
+- a word used sarcastically
+
+So frequency does **not** automatically imply meaning.
+
+Also, different forms of the same idea may appear as different words. For example:
+
+- run
+- runs
+- running
+
+This is why more advanced text analysis often uses **stemming** or **lemmatization**.
+
+Single-word plots are a useful starting point, but they do not capture all the complexity of language.
+
+## 15. What each plot is good for
+
+Here is a useful summary:
+
+- **Ranked bar chart**: best for precise comparison
+- **Lollipop chart**: similar to bars, visually lighter
+- **Word cloud**: engaging, but weak for exact comparison
+- **Treemap**: compact view of relative frequency
+- **Co-occurrence network**: reveals relationships between words
+- **Topic model plot**: reveals broader themes across documents
+
+So the choice of plot depends on the goal.
+
+- If your goal is **comparison**, bars are usually best.
+- If your goal is **engagement**, a word cloud may help.
+- If your goal is **structure**, a network is more useful.
+- If your goal is **hidden themes**, topic models are more useful.
+
+## 16. Final remark
+
+We began this course learning how to visualize numbers. We end it by seeing that even language can become data.
+
+Good text graphics require:
+
+1. good preprocessing  
+2. good visualization choices  
+3. careful interpretation  
+
+In other words, text visualization is not only about making words look attractive. It is about transforming language into data without forgetting that language always carries context, ambiguity, and meaning.
+
+Good visualization is never decoration. It is disciplined thinking made visible.

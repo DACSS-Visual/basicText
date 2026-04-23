@@ -1,9 +1,14 @@
 ---
-title: "Text Data"
 output:
-  html_document:
-    df_print: paged
+  html_document: default
+  pdf_document: default
 ---
+<br> 
+<center><img src="https://i.imgur.com/AbCCpQO.png" width="700"></center>
+
+
+_____
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -22,7 +27,7 @@ _____
 
 Text can also be visualized, but unlike numeric variables, text usually needs some extra preparation before plotting. Words appear in different forms, some words are very common but not very informative, and some meaningful ideas are expressed as phrases rather than as single words.
 
-In this session, you will learn a simple workflow for visualizing text data. We will begin with **word frequencies**, and then compare different graphical options:
+In this final session, you will learn a simple workflow for visualizing text data. We will begin with **word frequencies**, and then compare different graphical options:
 
 - word clouds
 - ranked bar charts
@@ -35,7 +40,7 @@ The goal is not only to produce attractive plots, but also to understand what ea
 
 ## 1. Get the text data
 
-Let us begin with a data frame containing tweets:
+Let us begin with a data frame containing some old tweets from D.Trump:
 
 ```{r}
 rm(list = ls())
@@ -72,9 +77,9 @@ head(SomeTrumpTweets, 3)
 
 At this point, we still have complete text messages. To visualize text, we first need to break each message into smaller units.
 
-## 3. Turn text into words
+## 3. Turn text into plottable words
 
-This process is called **tokenization**. Here, each tweet will be split into individual words.
+This process starts by what is calles **tokenization**: splitting phrases into individual words.
 
 ```{r}
 library(dplyr)
@@ -98,9 +103,9 @@ How many word-tokens do we have now?
 nrow(WordsIn_SomeTrumpTweets)
 ```
 
-This number includes repeated words, which is useful because frequency is often our first summary of text.
+This number includes repeated words, which is useful because frequency is often our first summary of text. We still have some pending pre processing.
 
-## 4. Remove common words: stopwords
+### 3.1. Remove common words: stopwords
 
 Many very frequent words carry little substantive meaning. Words such as *the*, *and*, *of*, or *to* are useful for grammar, but not always useful for analysis. These are called **stopwords**.
 
@@ -122,12 +127,18 @@ After removing stopwords, the number of rows decreases because many very common 
 
 This does **not** mean the remaining words are automatically important. It only means we are removing words that are usually too general to help interpretation.
 
-## 5. Compute word frequencies
+## 3.2. Getting rid of other unneeded words
 
-Now we can build a frequency table. This is the basic summary behind many text visualizations.
+Take a look at the most repeated words (tokens):
+```{r}
+sort(table(WordsIn_SomeTrumpTweets$EachWord))|>tail(10)
+```
+
+
+Then we can safely drop some, while keeping the ones that appeared more thna 5 times:
 
 ```{r}
-badWords = c("https", "t.co", "amp")
+badWords = c("https", "t.co")
 
 forCloud = WordsIn_SomeTrumpTweets |>
   count(EachWord, name = "Counts", sort = TRUE) |>
@@ -141,7 +152,9 @@ These are the words that appear most often after basic cleaning.
 
 Before moving to more decorative plots, it is useful to begin with the clearest graph possible.
 
-## 6. Ranked bar chart
+## 4. Options for plots
+
+### 4.1. Ranked bar chart
 
 A ranked bar chart is usually the best option when the goal is **comparison**.
 
@@ -171,7 +184,7 @@ This plot is very useful because it allows precise comparison. You can clearly s
 
 For comparing frequencies, bar charts are usually better than word clouds.
 
-## 7. Lollipop chart
+### 4.2. Lollipop chart
 
 A lollipop chart shows the same information as a bar chart, but with a lighter appearance.
 
@@ -191,21 +204,19 @@ ggplot(top_words,
 
 This chart still prioritizes ranking and comparison, but it uses less visual weight than bars.
 
-## 8. Word cloud
+### 4.1. Word cloud
 
 Now let us build the word cloud.
 
 ```{r, fig.height=7}
 library(ggwordcloud)
 
-forCloud_descending = forCloud |>
-  arrange(desc(Counts))
-
-ggplot(forCloud_descending,
+ggplot(forCloud,
        aes(label = EachWord,
            size  = Counts,
            color = Counts)) +
-  geom_text_wordcloud_area(eccentricity = 0.7, rm_outside = TRUE) +
+  geom_text_wordcloud_area(eccentricity = 0.7, 
+                           rm_outside = TRUE) +
   scale_size_area(max_size = 18) +
   scale_color_gradient(low = "red", high = "darkred") +
   theme_minimal(base_size = 16) +
@@ -214,9 +225,9 @@ ggplot(forCloud_descending,
 
 Word clouds are often visually attractive, but they are not ideal for accurate comparison. They are better for quick engagement and general impression than for careful measurement.
 
-## 9. Treemap
+### 4.2. Treemap
 
-A treemap is another way to represent frequencies, this time using **area**.
+A treemap is another way to represent frequencies, this time using **area** of rectangles.
 
 ```{r}
 library(treemapify)
@@ -232,7 +243,7 @@ ggplot(forCloud |>
 
 Treemaps are compact and visually appealing, but they are not as precise as bars for comparing values.
 
-## 10. A second example: reading from a TXT file
+## 5. A second example: reading from a TXT file
 
 Not all text data comes from tweets. Sometimes you simply have a text file.
 
@@ -251,7 +262,7 @@ head(otherText)
 
 Notice that a new row is created whenever a new paragraph or line break is found.
 
-Now let us tokenize the text and remove stopwords:
+Now let us tokenize the text and remove stopwords and the above discovered _badWords_:
 
 ```{r}
 otherText_words = otherText |>
@@ -269,7 +280,7 @@ Now compute frequencies:
 ```{r}
 txt_counts = otherText_words |>
   count(EachWord, name = "Counts", sort = TRUE) |>
-  filter(Counts > 4)
+  filter(Counts > 4) # filtered by count
 
 head(txt_counts, 10)
 ```

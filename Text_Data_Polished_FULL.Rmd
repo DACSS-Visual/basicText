@@ -256,6 +256,12 @@ Word clouds are often visually attractive, but they are not ideal for accurate c
 
 A treemap is another way to represent frequencies, this time using **area** of rectangles.
 
+Install "treemapify" using this code:
+```{r}
+# install.packages("treemapify", type = "binary")
+```
+
+
 ```{r}
 library(treemapify)
 
@@ -382,7 +388,7 @@ bigrams
 The output above is not ready yet, we need to split the pairs:
 
 ```{r}
-# library(tidyr)
+library(tidyr)
 bigrams_inColumns = bigrams |>
                     separate_wider_delim(bigram, 
                                          names = c("word1", "word2"), 
@@ -412,8 +418,9 @@ As we have pairs, we can think of each word as a network node. If word are nodes
 We need `igraph` here
 
 ```{r}
-# library(igraph)
-bigram_graph = igraph::graph_from_data_frame(bigram_counts_clean,directed = F)
+library(igraph)
+
+bigram_graph = graph_from_data_frame(bigram_counts_clean,directed = F)
 bigram_graph
 
 ```
